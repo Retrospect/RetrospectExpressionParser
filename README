@@ -1,1 +1,24 @@
-A Mathematical Expression Parser
+0=============================================================================0
+|                       A Mathematical Expression Parser                      |
+0=============================================================================0
+
+
+The Retrospect Expression parser.
+
+
+What expressions are supported
+==============================
+
+
+Required Features
+=================
+ * Calculate a given mathematical expression
+ * Store variables
+ * Support an expandable list of functions
+ 
+ 
+ 
+ Version History:
+ ================
+ 0.0.1  - 8 Oct 2011
+		Initial Release

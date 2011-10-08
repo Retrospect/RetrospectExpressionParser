@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import java.util.Vector;
 
 
@@ -23,16 +22,4 @@ public class ExpressionNode
 	{
 		return 0;
 	}
-=======
-/**
- * 
- */
-
-/**
- *
- */
-interface ExpressionNode
-{
-	public String toString();
->>>>>>> a51bc8828159e0d3ac48abe2d513b6e444d6df28
 }
