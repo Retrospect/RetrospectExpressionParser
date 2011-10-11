@@ -14,12 +14,12 @@ public class Parser
 	
 	public void parse()
 	{
-		root = splitPlusMinus(exp);
+		root = splitPlus(exp);
 	}
 	
-	public ExpressionNode splitPlusMinus(String subEx)
+	public ExpressionNode splitPlus(String subEx)
 	{
-		if (subEx.indexOf("+")==-1 && subEx.indexOf("-")==-1)
+		if (subEx.indexOf("+")==-1)
 		{
 			return splitDiv(subEx);
 		}
@@ -27,7 +27,7 @@ public class Parser
 		int prevIndex =0;
 		int bracketCount = 0;
 		
-		for (int i= 1;i<subEx.length();i++)	//Start at 1, because if the first char is a minus or a plus, it doesn't matter
+		for (int i= 0;i<subEx.length();i++)	//Start at 1, because if the first char is a minus or a plus, it doesn't matter
 		{
 			
 			if (subEx.charAt(i)=='+' && bracketCount == 0)
@@ -35,10 +35,37 @@ public class Parser
 				temp.elements.add(splitDiv(subEx.substring(prevIndex,i)));
 				prevIndex = i+1;
 			}
+			if (subEx.charAt(i)=='(')
+				bracketCount+=1;
+			if (subEx.charAt(i)==')')
+				bracketCount-=1;
+		}
+		
+		if (bracketCount!=0)
+		{
+			System.out.println("Error in number of brackets!");
+		}
+		
+		temp.elements.add(splitMinus(subEx.substring(prevIndex)));
+		return temp;
+	}
+	
+	public ExpressionNode splitMinus(String subEx)
+	{
+		if (subEx.indexOf("-")==-1)
+		{
+			return splitDiv(subEx);
+		}
+		OperandNode temp = new OperandNode('-');
+		int prevIndex =0;
+		int bracketCount = 0;
+		
+		for (int i= 0;i<subEx.length();i++)	//Start at 1, because if the first char is a minus or a plus, it doesn't matter
+		{
 			if (subEx.charAt(i)=='-' && bracketCount == 0)
 			{
 				temp.elements.add(splitDiv(subEx.substring(prevIndex,i)));
-				prevIndex = i;
+				prevIndex = i+1;
 			}
 			if (subEx.charAt(i)=='(')
 				bracketCount+=1;
@@ -65,7 +92,7 @@ public class Parser
 		int prevIndex =0;
 		int bracketCount = 0;
 		
-		for (int i= 1;i<subEx.length();i++)	//Start at 1, because if the first char is a minus or a plus, it doesn't matter
+		for (int i=0;i<subEx.length();i++)	//Start at 1, because if the first char is a minus or a plus, it doesn't matter
 		{
 			
 			if (subEx.charAt(i)=='/' && bracketCount == 0)
@@ -98,7 +125,8 @@ public class Parser
 		int prevIndex =0;
 		int bracketCount = 0;
 		
-		for (int i= 0;i<subEx.length();i++)	//Start at 1, because if the first char is a minus or a plus, it doesn't matter
+		int i = 0;
+		while (i<subEx.length())
 		{
 			
 			if (subEx.charAt(i)=='*' && bracketCount == 0)
@@ -107,21 +135,12 @@ public class Parser
 				temp.elements.add(constVarFunc(subEx.substring(prevIndex,i)));
 				prevIndex = i+1;
 			}
-			//if (subEx.charAt(i)=='(')
-			//{
-				//read until the last bracket is found.
-				//while (bracketCount>0 && i<subEx.length())
-				//{
-					//i++;
-					if(subEx.charAt(i) =='(')
-						bracketCount++;
-					if (subEx.charAt(i) == ')')
-						bracketCount--;
-				//}
-			//}
+			if (subEx.charAt(i)=='(')
+				bracketCount+=1;
+			if (subEx.charAt(i)==')')
+				bracketCount-=1;
 			
-			
-			//i++;
+			i++;
 		}
 		
 		if (bracketCount!=0)
@@ -135,13 +154,19 @@ public class Parser
 	
 	public ExpressionNode constVarFunc(String subEx)
 	{
+		
+		if (subEx.charAt(0)=='(' && subEx.charAt(subEx.length()-1)==')')
+		{
+			return splitPlus(subEx.substring(1,subEx.length()-1));
+		}
+		
 		return new ConstNode(Double.parseDouble(subEx));
 	}
 	
 	
 	public static void main(String[] args)
 	{
-		String expression = "100/25+14*2-8";
+		String expression = "15/(2+3)+90+5*5/5+2";
 		System.out.println(expression);
 		Parser x = new Parser(expression);
 		x.parse();
