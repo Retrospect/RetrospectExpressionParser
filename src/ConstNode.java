@@ -17,6 +17,5 @@ public class ConstNode extends ExpressionNode
 	public double evaluate()
 	{
 		return value;
-
 	}
 }

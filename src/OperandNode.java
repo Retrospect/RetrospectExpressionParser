@@ -21,8 +21,8 @@ public class OperandNode extends ExpressionNode
 		
 		if (operator=='-')
 		{
-			ammount = 0;
-			for (int i=0;i<elements.size();i++)
+			ammount = elements.elementAt(0).evaluate();;
+			for (int i=1;i<elements.size();i++)
 				ammount-=elements.elementAt(i).evaluate();
 		}
 		

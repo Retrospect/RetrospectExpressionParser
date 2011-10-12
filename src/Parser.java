@@ -21,7 +21,7 @@ public class Parser
 	{
 		if (subEx.indexOf("+")==-1)
 		{
-			return splitDiv(subEx);
+			return splitMinus(subEx);
 		}
 		OperandNode temp = new OperandNode('+');
 		int prevIndex =0;
@@ -131,7 +131,6 @@ public class Parser
 			
 			if (subEx.charAt(i)=='*' && bracketCount == 0)
 			{
-				System.out.println("Sub:" +subEx.substring(prevIndex,i));
 				temp.elements.add(constVarFunc(subEx.substring(prevIndex,i)));
 				prevIndex = i+1;
 			}
@@ -159,20 +158,51 @@ public class Parser
 		{
 			return splitPlus(subEx.substring(1,subEx.length()-1));
 		}
-		
-		return new ConstNode(Double.parseDouble(subEx));
+		if (isDouble(subEx))
+		{
+			return new ConstNode(Double.parseDouble(subEx));
+		}
+		return new VariableNode(subEx);
 	}
+	
+	public boolean isDouble( String input )  
+	{  
+	   try  
+	   {  
+	      Double.parseDouble( input );  
+	      return true;
+	   }  
+	   catch (NumberFormatException a)
+	   {  
+	      return false;  
+	   }  
+	}  
 	
 	
 	public static void main(String[] args)
 	{
-		String expression = "15/(2+3)+90+5*5/5+2";
-		System.out.println(expression);
-		Parser x = new Parser(expression);
-		x.parse();
-		System.out.println(x.root);
-		System.out.println(x.root.evaluate());
+		String input = "";
+		Scanner inReader = new Scanner(System.in);
+		
+		//Write textbase interface
+		while (input.equalsIgnoreCase("exit") == false)
+		{
+			System.out.print(">> ");
+			input = inReader.next();
+			if (input.equalsIgnoreCase("exit"))
+				break;
+			//Next, decide what to do.
+			if(input.indexOf("=") >0)
+			{
+				//Now it is is variable
+			}
+			else
+			{
+				//Just evaluate
+				Parser exp = new Parser(input);
+				exp.parse();
+				System.out.println(exp.root.toString());
+			}
+		}
 	}
-	
-	
 }
